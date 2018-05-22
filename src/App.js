@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Quote from './components/Quote'
+import Notification from './components/Notification'
 
 class App extends Component {
   constructor(props) {
@@ -7,6 +8,7 @@ class App extends Component {
 
     this.state = {
       totalLikes: 0,
+      showNotification: false,
       quotes: [
         { text: 'It is how it is', author: 'Jerry', likes: 0, id: 0 },
         { text: 'props are great', author: 'Some React guy', likes: 0, id: 1 },
@@ -29,7 +31,12 @@ class App extends Component {
     this.setState({
       quotes: [...startOfNewArray, newObject, ...endOfNewArray],
       totalLikes: this.state.totalLikes + 1,
+      showNotification: true,
     })
+  }
+
+  closeNotification() {
+    this.setState({ showNotification: false })
   }
 
   render() {
@@ -45,6 +52,9 @@ class App extends Component {
             onLike={e => this.increaseLikes(quote.id)}
           />
         ))}
+        {this.state.showNotification && (
+          <Notification onClose={e => this.closeNotification()} />
+        )}
       </div>
     )
   }
