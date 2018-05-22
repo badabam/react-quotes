@@ -10,11 +10,27 @@ class App extends Component {
       totalLikes: 0,
       showNotification: false,
       quotes: [
-        { text: 'It is how it is', author: 'Jerry', likes: 0, id: 0 },
-        { text: 'props are great', author: 'Some React guy', likes: 0, id: 1 },
-        { text: 'props are great', author: 'Some React guy', likes: 0, id: 2 },
-        { text: 'props are great', author: 'Some React guy', likes: 0, id: 3 },
-        { text: 'props are great', author: 'Some React guy', likes: 0, id: 4 },
+        {
+          text: 'It is how it is',
+          author: 'Jerry',
+          likes: 0,
+          id: 0,
+          color: 'blue',
+        },
+        {
+          text: 'props are great',
+          author: 'Some React guy',
+          likes: 0,
+          id: 1,
+          color: 'teal',
+        },
+        {
+          text: 'props are great',
+          author: 'Some React guy',
+          likes: 0,
+          id: 2,
+          color: 'violet',
+        },
       ],
     }
   }
@@ -48,6 +64,7 @@ class App extends Component {
             key={quote.id}
             numLikes={quote.likes}
             text={quote.text}
+            color={quote.color}
             author={quote.author}
             onLike={e => this.increaseLikes(quote.id)}
           />
