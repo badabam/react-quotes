@@ -2,11 +2,15 @@ import React, { Component } from 'react'
 
 export default class Notification extends Component {
   render() {
-    return (
-      <div>
-        Likes updated!
-        <button onClick={this.props.onClose}>Ok</button>
-      </div>
-    )
+    if (this.props.show) {
+      return (
+        <div>
+          Likes updated!
+          <button onClick={this.props.onClose}>Ok</button>
+        </div>
+      )
+    } else {
+      return null
+    }
   }
 }

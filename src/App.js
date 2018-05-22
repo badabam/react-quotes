@@ -52,9 +52,10 @@ class App extends Component {
             onLike={e => this.increaseLikes(quote.id)}
           />
         ))}
-        {this.state.showNotification && (
-          <Notification onClose={e => this.closeNotification()} />
-        )}
+        <Notification
+          show={this.state.showNotification}
+          onClose={e => this.closeNotification()}
+        />
       </div>
     )
   }
