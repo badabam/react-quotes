@@ -6,36 +6,45 @@ class App extends Component {
     super(props)
 
     this.state = {
-      firstQuoteLikes: 0,
-      secondQuoteLikes: 0,
+      totalLikes: 0,
+      quotes: [
+        { text: 'It is how it is', author: 'Jerry', likes: 0, id: 0 },
+        { text: 'props are great', author: 'Some React guy', likes: 0, id: 1 },
+        { text: 'props are great', author: 'Some React guy', likes: 0, id: 2 },
+        { text: 'props are great', author: 'Some React guy', likes: 0, id: 3 },
+        { text: 'props are great', author: 'Some React guy', likes: 0, id: 4 },
+      ],
     }
   }
 
-  increaseFirstLikes() {
-    this.setState({ firstQuoteLikes: this.state.firstQuoteLikes + 1 })
-  }
+  increaseLikes(id) {
+    const foundQuoteIndex = this.state.quotes.findIndex(
+      quote => quote.id === id
+    )
+    const foundQuote = this.state.quotes[foundQuoteIndex]
+    const startOfNewArray = this.state.quotes.slice(0, foundQuoteIndex)
+    const endOfNewArray = this.state.quotes.slice(foundQuoteIndex + 1)
+    const newObject = { ...foundQuote, likes: foundQuote.likes + 1 }
 
-  increaseSecondLikes() {
-    this.setState({ secondQuoteLikes: this.state.secondQuoteLikes + 1 })
+    this.setState({
+      quotes: [...startOfNewArray, newObject, ...endOfNewArray],
+      totalLikes: this.state.totalLikes + 1,
+    })
   }
 
   render() {
-    const totalLikes = this.state.firstQuoteLikes + this.state.secondQuoteLikes
     return (
       <div>
-        <h1>Total likes: {totalLikes}</h1>
-        <Quote
-          onLike={e => this.increaseFirstLikes()}
-          numLikes={this.state.firstQuoteLikes}
-          text="It is how it is"
-          author="Jerry"
-        />
-        <Quote
-          onLike={e => this.increaseSecondLikes()}
-          numLikes={this.state.secondQuoteLikes}
-          text="props are immutable"
-          author="Some React-Guy"
-        />
+        <h3>Total likes: {this.state.totalLikes}</h3>
+        {this.state.quotes.map(quote => (
+          <Quote
+            key={quote.id}
+            numLikes={quote.likes}
+            text={quote.text}
+            author={quote.author}
+            onLike={e => this.increaseLikes(quote.id)}
+          />
+        ))}
       </div>
     )
   }
