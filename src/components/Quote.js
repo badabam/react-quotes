@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { css } from 'emotion'
 import styled from 'react-emotion'
-import { buttonStyle } from '../styles/buttons'
 
 export default class Quote extends Component {
   render() {
@@ -10,14 +9,37 @@ export default class Quote extends Component {
       display: block;
       margin-bottom: 20px;
     `
+    const bookmarkedStyle = css`
+      font-size: 1.3em;
+      display: block;
+      color: hotpink;
+      margin-bottom: 20px;
+    `
+    const StyledButton = styled('button')`
+      height: 20px;
+      background: ${props => (props.isBookmarked ? '#333' : 'hotpink')};
+      color: white;
+      border: none;
+      &:not(:last-child) {
+        margin-right: 2px;
+      }
+    `
+
+    const ButtonContainer = styled('div')`
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    `
 
     const StyledDiv = styled('div')`
+      font-family: Georgia, serif;
       display: flex;
       flex-direction: column;
-      background: ${this.props.color || 'lightgray'};
-      margin-bottom: 2px;
-      width: 200px;
+      align-items: center;
+      justify-content: center;
+      background: lightgray;
       padding: 20px;
+      position: relative;
     `
 
     return (
@@ -26,9 +48,17 @@ export default class Quote extends Component {
           {this.props.text}
         </q>
         <i>- {this.props.author}</i>
-        <button className={buttonStyle} onClick={e => this.props.onLike()}>
-          Like ({this.props.numLikes})
-        </button>
+        <ButtonContainer>
+          <StyledButton onClick={e => this.props.onLike()}>
+            Like ({this.props.numLikes})
+          </StyledButton>
+          <StyledButton
+            isBookmarked={this.props.isBookmarked}
+            onClick={e => this.props.onBookmark()}
+          >
+            Bookmark
+          </StyledButton>
+        </ButtonContainer>
       </StyledDiv>
     )
   }

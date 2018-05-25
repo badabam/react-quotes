@@ -1,0 +1,10 @@
+.MiniQuoteList {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.MiniQuoteList__list {
+  overflow: scroll;
+  height: auto;
+}

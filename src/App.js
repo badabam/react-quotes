@@ -1,6 +1,38 @@
 import React, { Component } from 'react'
 import Quote from './components/Quote'
+import MiniQuote from './components/MiniQuote'
+import QuoteList from './components/QuoteList'
+import MiniQuoteList from './components/MiniQuoteList/MiniQuoteList'
 import Notification from './components/Notification'
+import api from './api'
+import { css, injectGlobal } from 'emotion'
+import styled from 'react-emotion'
+
+injectGlobal(`
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", sans-serif;
+    overflow: hidden;
+  }
+
+`)
+
+const Grid = styled('div')`
+  display: grid;
+  overflow: hidden;
+  padding: 10px;
+  height: 100vh;
+  grid-gap: 0 20px;
+  grid-template-columns: auto 200px;
+  grid-template-rows: 50% 50%;
+  grid-template-areas:
+    'quotes bookmarks'
+    'quotes likes';
+`
 
 class App extends Component {
   constructor(props) {
@@ -9,30 +41,14 @@ class App extends Component {
     this.state = {
       totalLikes: 0,
       showNotification: false,
-      quotes: [
-        {
-          text: 'It is how it is',
-          author: 'Jerry',
-          likes: 0,
-          id: 0,
-          color: 'blue',
-        },
-        {
-          text: 'props are great',
-          author: 'Some React guy',
-          likes: 0,
-          id: 1,
-          color: 'teal',
-        },
-        {
-          text: 'props are great',
-          author: 'Some React guy',
-          likes: 0,
-          id: 2,
-          color: 'violet',
-        },
-      ],
+      quotes: [],
     }
+  }
+
+  componentDidMount() {
+    this.setState({
+      quotes: api.getQuotes(),
+    })
   }
 
   increaseLikes(id) {
@@ -51,29 +67,53 @@ class App extends Component {
     })
   }
 
+  bookmark(id) {
+    const foundQuoteIndex = this.state.quotes.findIndex(
+      quote => quote.id === id
+    )
+    const foundQuote = this.state.quotes[foundQuoteIndex]
+    const startOfNewArray = this.state.quotes.slice(0, foundQuoteIndex)
+    const endOfNewArray = this.state.quotes.slice(foundQuoteIndex + 1)
+    const newObject = { ...foundQuote, isBookmarked: !foundQuote.isBookmarked }
+
+    this.setState({
+      quotes: [...startOfNewArray, newObject, ...endOfNewArray],
+    })
+  }
+
   closeNotification() {
     this.setState({ showNotification: false })
   }
 
   render() {
     return (
-      <div>
-        <h3>Total likes: {this.state.totalLikes}</h3>
-        {this.state.quotes.map(quote => (
-          <Quote
-            key={quote.id}
-            numLikes={quote.likes}
-            text={quote.text}
-            color={quote.color}
-            author={quote.author}
-            onLike={e => this.increaseLikes(quote.id)}
+      <React.Fragment>
+        <Grid>
+          <QuoteList
+            bookmark={id => this.bookmark(id)}
+            increaseLikes={id => this.increaseLikes(id)}
+            quotes={this.state.quotes}
           />
-        ))}
+          <MiniQuoteList
+            headline={'Bookmarks'}
+            gridArea={'bookmarks'}
+            background={'#333'}
+            quotes={this.state.quotes}
+            filterFunction={quote => quote.isBookmarked}
+          />
+          <MiniQuoteList
+            headline={'Likes'}
+            gridArea={'likes'}
+            background={'hotpink'}
+            quotes={this.state.quotes}
+            filterFunction={quote => quote.likes > 0}
+          />
+        </Grid>
         <Notification
           show={this.state.showNotification}
           onClose={e => this.closeNotification()}
         />
-      </div>
+      </React.Fragment>
     )
   }
 }
