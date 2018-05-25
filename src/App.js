@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import Quote from './components/Quote'
-import MiniQuote from './components/MiniQuote'
 import QuoteList from './components/QuoteList'
 import MiniQuoteList from './components/MiniQuoteList/MiniQuoteList'
 import Notification from './components/Notification'
 import api from './api'
-import { css, injectGlobal } from 'emotion'
+import { injectGlobal } from 'emotion'
 import styled from 'react-emotion'
 
 injectGlobal(`

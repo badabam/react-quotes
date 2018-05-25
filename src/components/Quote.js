@@ -9,12 +9,6 @@ export default class Quote extends Component {
       display: block;
       margin-bottom: 20px;
     `
-    const bookmarkedStyle = css`
-      font-size: 1.3em;
-      display: block;
-      color: hotpink;
-      margin-bottom: 20px;
-    `
     const StyledButton = styled('button')`
       height: 20px;
       background: ${props => (props.isBookmarked ? '#333' : 'hotpink')};
@@ -31,7 +25,7 @@ export default class Quote extends Component {
       bottom: 0;
     `
 
-    const StyledDiv = styled('div')`
+    const QuoteContainer = styled('div')`
       font-family: Georgia, serif;
       display: flex;
       flex-direction: column;
@@ -43,7 +37,7 @@ export default class Quote extends Component {
     `
 
     return (
-      <StyledDiv>
+      <QuoteContainer>
         <q className={quoteStyle} lang="de">
           {this.props.text}
         </q>
@@ -59,7 +53,7 @@ export default class Quote extends Component {
             Bookmark
           </StyledButton>
         </ButtonContainer>
-      </StyledDiv>
+      </QuoteContainer>
     )
   }
 }

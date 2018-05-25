@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import MiniQuote from '../MiniQuote'
-import { css } from 'emotion'
 import './MiniQuoteList.css'
 
 export default class MiniQuoteList extends Component {
