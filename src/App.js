@@ -49,34 +49,43 @@ class App extends Component {
     })
   }
 
-  increaseLikes(id) {
+  /**
+   * Update a quote by id. The changeFunction is called
+   * with the original state of selected quote and has
+   * to return an object with the changes to the quote as
+   * an object.
+   *
+   * @param {String} id The id of the quote to change
+   * @param {Function} changeFunction (prevQuote => changesToMerge)
+   * @param {Object} additionalStateChange An object with more changes to the state
+   */
+  updateQuoteState(id, changeFunction, additionalStateChange) {
     const foundQuoteIndex = this.state.quotes.findIndex(
       quote => quote.id === id
     )
     const foundQuote = this.state.quotes[foundQuoteIndex]
     const startOfNewArray = this.state.quotes.slice(0, foundQuoteIndex)
     const endOfNewArray = this.state.quotes.slice(foundQuoteIndex + 1)
-    const newObject = { ...foundQuote, likes: foundQuote.likes + 1 }
+    const newObject = { ...foundQuote, ...changeFunction(foundQuote) }
 
     this.setState({
       quotes: [...startOfNewArray, newObject, ...endOfNewArray],
-      totalLikes: this.state.totalLikes + 1,
-      showNotification: true,
+      ...additionalStateChange,
     })
   }
 
-  bookmark(id) {
-    const foundQuoteIndex = this.state.quotes.findIndex(
-      quote => quote.id === id
-    )
-    const foundQuote = this.state.quotes[foundQuoteIndex]
-    const startOfNewArray = this.state.quotes.slice(0, foundQuoteIndex)
-    const endOfNewArray = this.state.quotes.slice(foundQuoteIndex + 1)
-    const newObject = { ...foundQuote, isBookmarked: !foundQuote.isBookmarked }
+  increaseLikes(id) {
+    const updateQuote = oldQuote => ({ likes: oldQuote.likes + 1 })
+    const additionalChanges = {
+      totalLikes: this.state.totalLikes + 1,
+      showNotification: true,
+    }
+    this.updateQuoteState(id, updateQuote, additionalChanges)
+  }
 
-    this.setState({
-      quotes: [...startOfNewArray, newObject, ...endOfNewArray],
-    })
+  bookmark(id) {
+    const updateQuote = quote => ({ isBookmarked: !quote.isBookmarked })
+    this.updateQuoteState(id, updateQuote)
   }
 
   closeNotification() {
