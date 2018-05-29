@@ -44,8 +44,14 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      quotes: api.getQuotes(),
+    api.getQuotes().then(data => {
+      this.setState({
+        quotes: data.quotes.map(quote => ({
+          ...quote,
+          likes: 0,
+          isBookmarked: false,
+        })),
+      })
     })
   }
 
