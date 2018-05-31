@@ -45,12 +45,14 @@ class App extends Component {
 
   componentDidMount() {
     api.getQuotes().then(data => {
+      const enhancedQuotes = data.quotes.map(quote => ({
+        ...quote,
+        likes: 0,
+        isBookmarked: false,
+      }))
+
       this.setState({
-        quotes: data.quotes.map(quote => ({
-          ...quote,
-          likes: 0,
-          isBookmarked: false,
-        })),
+        quotes: enhancedQuotes,
       })
     })
   }
